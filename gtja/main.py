@@ -1,4 +1,8 @@
+import os
 import tornado
+
+import conf
+    
 
 class Application(tornado.web.Application):
     def __init__(self):
