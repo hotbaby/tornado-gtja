@@ -32,10 +32,15 @@ class BaseHandler(tornado.web.RequestHandler):
     def db(self):
         return self.application.db
 
+    def set_default_handlers(self):
+        pass
+
 
 class HomeHandler(BaseHandler):
     def get(self):
-        self.write("Welcome to gtja report website.")
+        #self.set_header("content-type", "text/plain")
+        #self.write("<p>Welcome to gtja report website..</p>")
+        self.render("base.html")
 
 
 class AbstractHandler(BaseHandler):
