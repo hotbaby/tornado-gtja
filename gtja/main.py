@@ -50,16 +50,22 @@ class AbstractHandler(BaseHandler):
         return self.db[conf.MONGODB_COLLECTION_REPORT_ABSTRACT]
     
     def get(self):
-        item = self.collection.find_one({"url":"http://www.gtja.com/fyInfo/contentForJunhong.jsp?id=694164"})
-        if item is None:
-            result = {}
-        else:
-            result = {
-                "title":item["title"],
-                "date":str(item["date"]),
-                "abstract":item["abstract"],
-                "url":item["url"],
-            }
+        cursor = self.collection.find().limit(10)
+        
+        result = []
+        I = iter(cursor)
+        while(True):
+            try:
+                item = next(I)
+                result.append({
+                    "title":item["title"],
+                    "date":str(item["date"]),
+                    "abstract":item["abstract"],
+                    "url":item["url"]
+                })
+            except StopIteration:
+                break
+        
         self.write(json.dumps(result))
 
 

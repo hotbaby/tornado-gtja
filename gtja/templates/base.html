@@ -2,17 +2,15 @@
 
 <head>
 <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
-<script>
-$(document).ready(function(){})
-</script>
 </head>
 
 <body>
 
-<div class="content">
+<hr>
+<div class="content" style="display:none">
 	<div class="postbody">
-		<h3 class="posttile"><a href="www.gtja.com">title</a></h3>	
-		<span class="postdate"> 2015.11.2</span>
+		<h3 class="posttile">title</h3><br>
+		<span class="postdate"> 2015.11.2</span><br>
 		<div class="postabstract">
 			<strong>Abstract .........</strong>
 		</div>
@@ -20,11 +18,146 @@ $(document).ready(function(){})
 	<hr>
 </div>
 
-<input id="btn", type="button"></input>
+<div class="content" style="display:none">
+	<div class="postbody">
+		<h3 class="posttile">title</h3><br>
+		<span class="postdate"> 2015.11.2</span><br>
+		<div class="postabstract">
+			<strong>Abstract .........</strong>
+		</div>
+	</div>
+	<hr>
+</div>
+
+
+<div class="content" style="display:none">
+	<div class="postbody">
+		<h3 class="posttile">title</h3><br>
+		<span class="postdate"> 2015.11.2</span><br>
+		<div class="postabstract">
+			<strong>Abstract .........</strong>
+		</div>
+	</div>
+	<hr>
+</div>
+
+
+<div class="content" style="display:none">
+	<div class="postbody">
+		<h3 class="posttile">title</h3><br>
+		<span class="postdate"> 2015.11.2</span><br>
+		<div class="postabstract">
+			<strong>Abstract .........</strong>
+		</div>
+	</div>
+	<hr>
+</div>
+
+
+<div class="content" style="display:none">
+	<div class="postbody">
+		<h3 class="posttile">title</h3><br>
+		<span class="postdate"> 2015.11.2</span><br>
+		<div class="postabstract">
+			<strong>Abstract .........</strong>
+		</div>
+	</div>
+	<hr>
+</div>
+
+
+<div class="content" style="display:none">
+	<div class="postbody">
+		<h3 class="posttile">title</h3><br>
+		<span class="postdate"> 2015.11.2</span><br>
+		<div class="postabstract">
+			<strong>Abstract .........</strong>
+		</div>
+	</div>
+	<hr>
+</div>
+
+
+<div class="content" style="display:none">
+	<div class="postbody">
+		<h3 class="posttile">title</h3><br>
+		<span class="postdate"> 2015.11.2</span><br>
+		<div class="postabstract">
+			<strong>Abstract .........</strong>
+		</div>
+	</div>
+	<hr>
+</div>
+
+
+<div class="content" style="display:none">
+	<div class="postbody">
+		<h3 class="posttile">title</h3><br>
+		<span class="postdate"> 2015.11.2</span><br>
+		<div class="postabstract">
+			<strong>Abstract .........</strong>
+		</div>
+	</div>
+	<hr>
+</div>
+
+
+<div class="content" style="display:none">
+	<div class="postbody">
+		<h3 class="posttile">title</h3><br>
+		<span class="postdate"> 2015.11.2</span><br>
+		<div class="postabstract">
+			<strong>Abstract .........</strong>
+		</div>
+	</div>
+	<hr>
+</div>
+
+
+<div class="content" style="display:none">
+	<div class="postbody">
+		<h3 class="posttile">title</h3><br>
+		<span class="postdate"> 2015.11.2</span><br>
+		<div class="postabstract">
+			<strong>Abstract .........</strong>
+		</div>
+	</div>
+	<hr>
+</div>
+
+<div class="contentpageindex" style="display:none">
+<a href="javascrip:goHomePage()">Home</a>
+<a hidden="hidden" href="javascrip:toPreviousPage()">Previous</a>
+<a hidden="hidden" href="javascrip:toNextPage()">Next</a>
+<a href="javascrip:toLastPage()">Last</a>
+</div>
 
 <script>
-$(".content").load("/report/abstract")
+
+$(document).ready(function() {
+	$.get("/report/abstract", function(data, status){
+		
+		var jsonData = $.parseJSON(data)
+		
+		for(var i=0; i<jsonData.length; i++)
+		{
+			var sel = ".posttile:eq(".concat(i.toString(), ")")
+			$(".posttile:eq(0)").replaceWith(jsonData[i]["title"])
+			sel = "div.postdate:eq(".concat(i.toString(), ")")
+			$("div.postdate:eq(0)").replaceWith(jsonData[i]["date"])
+			sel = "div.postabstract:eq(".concat(i.toString(), ")")
+			$("div.postabstract:eq(0)").replaceWith(jsonData[i]["abstract"])
+		}
+		$(".content").show()
+		$(".contentpageindex").show()
+	})
+})
+
+
 </script>
+
+
+
 
 </body>
 
