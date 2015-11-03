@@ -2,13 +2,182 @@
 
 <head>
 <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script type="text/javascript">
+
+function goHomePage(){
+	var current_page = parseInt($("#current_page").text())
+	var total_pages = parseInt($("#total_pages").text())
+	var rows_per_page = parseInt($("#rows_per_page").text())
+	var offset = 0
+	var limit = rows_per_page
+	var request_data = {
+		"offset": offset,
+		"limit": limit
+	}
+	
+	$.post("/report/abstract", request_data, function(data, status){
+		var json_data = $.parseJSON(data)
+		var items = json_data["result"]
+		
+		for(var i=0; i<items.length; i++)
+		{
+			var sel = ".posttile:eq(" + i.toString() + ")"
+			$(sel).text(items[i]["title"])
+			sel = ".postdate:eq(" + i.toString() + ")"
+			$(sel).text(items[i]["date"])
+			sel = ".postabstract:eq(" + i.toString() + ")"
+			$(sel).text(items[i]["abstract"])
+		}
+	})
+	
+	$("#current_page").text((1).toString())
+	$("#next_page").show()
+	$("#previous_page").hide()
+}
+
+function goLastPage(){
+	var current_page = parseInt($("#current_page").text())
+	var total_pages = parseInt($("#total_pages").text())
+	var rows_per_page = parseInt($("#rows_per_page").text())
+	var offset = (total_pages-1)*rows_per_page
+	var limit = rows_per_page
+	var request_data = {
+		"offset": offset,
+		"limit": limit
+	}
+	
+	$.post("/report/abstract", request_data, function(data, status){
+		var json_data = $.parseJSON(data)
+		var items = json_data["result"]
+		
+		for(var i=0; i<items.length; i++)
+		{
+			var sel = ".posttile:eq(" + i.toString() + ")"
+			$(sel).text(items[i]["title"])
+			sel = ".postdate:eq(" + i.toString() + ")"
+			$(sel).text(items[i]["date"])
+			sel = ".postabstract:eq(" + i.toString() + ")"
+			$(sel).text(items[i]["abstract"])
+		}
+	})
+	
+	$("#current_page").text((total_pages).toString())
+	$("#next_page").hide()
+	$("#previous_page").show()
+}
+
+function goPreviousPage(){
+	var current_page = parseInt($("#current_page").text())
+	var total_pages = parseInt($("#total_pages").text())
+	var rows_per_page = parseInt($("#rows_per_page").text())
+	var offset = (current_page-2)*rows_per_page
+	var limit = rows_per_page
+	var request_data = {
+		"offset": offset,
+		"limit": limit
+	}
+	
+	$.post("/report/abstract", request_data, function(data, status){
+		var json_data = $.parseJSON(data)
+		var items = json_data["result"]
+		
+		for(var i=0; i<items.length; i++)
+		{
+			var sel = ".posttile:eq(" + i.toString() + ")"
+			$(sel).text(items[i]["title"])
+			sel = ".postdate:eq(" + i.toString() + ")"
+			$(sel).text(items[i]["date"])
+			sel = ".postabstract:eq(" + i.toString() + ")"
+			$(sel).text(items[i]["abstract"])
+		}
+	})
+	
+	$("#current_page").text((current_page-1).toString())
+	$("#next_page").show()
+	if ((current_page-1) == 1)
+	{
+		$("#previous_page").hide()
+	}
+}
+
+function goNextPage(){
+	var current_page = parseInt($("#current_page").text())
+	var total_pages = parseInt($("#total_pages").text())
+	var rows_per_page = parseInt($("#rows_per_page").text())
+	var offset = current_page*rows_per_page
+	var limit = rows_per_page
+	var request_data = {
+		"offset": offset,
+		"limit": limit
+	}
+	
+	$.post("/report/abstract", request_data, function(data, status){
+		var json_data = $.parseJSON(data)
+		var items = json_data["result"]
+		
+		for(var i=0; i<items.length; i++)
+		{
+			var sel = ".posttile:eq(" + i.toString() + ")"
+			$(sel).text(items[i]["title"])
+			sel = ".postdate:eq(" + i.toString() + ")"
+			$(sel).text(items[i]["date"])
+			sel = ".postabstract:eq(" + i.toString() + ")"
+			$(sel).text(items[i]["abstract"])
+		}
+	})
+	
+	$("#current_page").text((current_page+1).toString())
+	$("#previous_page").show()
+	if (total_pages == (current_page+1))
+	{
+		$("#next_page").hide()
+	}
+}
+
+</script>
 </head>
 
 <body>
 
 <hr>
-<div class="content" style="display:none">
-	<div class="postbody">
+<div class="content", >
+	<div class="postbody" id="postbody1">
+		<h4 class="posttile">title</h4><br>
+		<strong class="postdate"> 2015.11.2</strong><br>
+		<div class="postabstract">
+			<strong>Abstract .........</strong>
+		</div>
+	</div>
+	<hr>
+	
+	<div class="postbody" id="postbody2">
+		<h3 class="posttile">title</h3><br>
+		<span class="postdate"> 2015.11.2</span><br>
+		<div class="postabstract">
+			<strong>Abstract .........</strong>
+		</div>
+	</div>
+	<hr>
+	
+	<div class="postbody" id="postbody3">
+		<h3 class="posttile">title</h3><br>
+		<span class="postdate"> 2015.11.2</span><br>
+		<div class="postabstract">
+			<strong>Abstract .........</strong>
+		</div>
+	</div>
+	<hr>
+	
+	<div class="postbody" id="postbody4">
+		<h3 class="posttile">title</h3><br>
+		<span class="postdate"> 2015.11.2</span><br>
+		<div class="postabstract">
+			<strong>Abstract .........</strong>
+		</div>
+	</div>
+	<hr>
+	
+	<div class="postbody" id="postbody4">
 		<h3 class="posttile">title</h3><br>
 		<span class="postdate"> 2015.11.2</span><br>
 		<div class="postabstract">
@@ -18,86 +187,60 @@
 	<hr>
 </div>
 
-<div class="content" style="display:none">
-	<div class="postbody">
-		<h3 class="posttile">title</h3><br>
-		<span class="postdate"> 2015.11.2</span><br>
-		<div class="postabstract">
-			<strong>Abstract .........</strong>
-		</div>
-	</div>
-	<hr>
+<div class="contentpageindex" >
+	<span>Page:</span>
+	<span id="current_page">1</span>
+	<span>/</span>
+	<span id="total_pages">100</span>
+	
+	<span>Rows:</span>
+	<span id="rows_per_page">5</span>
+	
+	<a id="home_page" href="javascript:goHomePage()">Home</a>
+	<a id="previous_page" hidden="hidden" href="javascript:goPreviousPage()">Previous</a>
+	<a id="next_page" href="javascript:goNextPage()">Next</a>
+	<a id="last_page" href="javascript:goLastPage()">Last</a>
 </div>
 
-
-<div class="content" style="display:none">
-	<div class="postbody">
-		<h3 class="posttile">title</h3><br>
-		<span class="postdate"> 2015.11.2</span><br>
-		<div class="postabstract">
-			<strong>Abstract .........</strong>
-		</div>
-	</div>
-	<hr>
-</div>
-
-
-<div class="content" style="display:none">
-	<div class="postbody">
-		<h3 class="posttile">title</h3><br>
-		<span class="postdate"> 2015.11.2</span><br>
-		<div class="postabstract">
-			<strong>Abstract .........</strong>
-		</div>
-	</div>
-	<hr>
-</div>
-
-
-<div class="content" style="display:none">
-	<div class="postbody">
-		<h3 class="posttile">title</h3><br>
-		<span class="postdate"> 2015.11.2</span><br>
-		<div class="postabstract">
-			<strong>Abstract .........</strong>
-		</div>
-	</div>
-	<hr>
-</div>
-
-<div class="contentpageindex" style="display:none">
-<span>Page:</span>
-<span>currrent</span>
-<span>/</span>
-<span>total</span>
-<a href="javascrip:goHomePage()">Home</a>
-<a hidden="hidden" href="javascrip:goPreviousPage()">Previous</a>
-<a hidden="hidden" href="javascrip:goNextPage()">Next</a>
-<a href="javascrip:goLastPage()">Last</a>
-</div>
-
-<script>
-
+<script type="text/javascript">
 $(document).ready(function() {
 	$.get("/report/abstract", function(data, status){
 		
 		var jsonData = $.parseJSON(data)
 		items = jsonData["result"]
+		
 		for(var i=0; i<items.length; i++)
 		{
-			$(".posttile:eq(0)").replaceWith(items[i]["title"])
-			$("div.postdate:eq(0)").replaceWith(items[i]["date"])
-			$("div.postabstract:eq(0)").replaceWith(items[i]["abstract"])
+			var sel = ".posttile:eq(" + i.toString() + ")"
+			$(sel).text(items[i]["title"])
+			sel = ".postdate:eq(" + i.toString() + ")"
+			$(sel).text(items[i]["date"])
+			sel = ".postabstract:eq(" + i.toString() + ")"
+			$(sel).text(items[i]["abstract"])
 		}
-		$(".content").show()
-		$(".contentpageindex").show()
+		
+	})
+	
+	$.get("/report/count", function(data, status){
+		var jsonData = $.parseJSON(data)
+		var total_items = jsonData["number"]
+		var current_page = parseInt($("#current_page").text())
+		var rows_per_page = parseInt($("#rows_per_page").text())
+		var total_pages = current_page
+		if (total_items % rows_per_page != 0)
+		{
+			total_pages = parseInt(total_items/rows_per_page) + 1
+		}
+		else
+		{
+			total_pages = parseInt(total_items/rows_per_page)
+		}
+		total_pages = total_pages.toString()
+		$("#total_pages").text(total_pages)
+		
 	})
 })
-
 </script>
-
-
-
 
 </body>
 

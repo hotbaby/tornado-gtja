@@ -6,22 +6,20 @@ import tornado.httpserver
 from pymongo import Connection
 
 import conf
-from jieba.__main__ import result
-from boto.dynamodb.item import Item
-from win32con import SLE_ERROR
-    
+from time import sleep
 
 class Application(tornado.web.Application):
     def __init__(self):
         handlers = [
             (r"/", HomeHandler),
             (r"/report/abstract", AbstractHandler),
+            (r"/report/count", AbstractCountHandler),
         ]
         settings = dict(
             template_path=os.path.join(os.path.dirname(__file__), "templates"),
             static_path=os.path.join(os.path.dirname(__file__), "static"),
-            xsrf_cookies=True,
-            cookie_secret="GENERATE_YOUR_OWN_RANDOM_VALUE_HERE__", #TODO
+            #xsrf_cookies=True,
+            #cookie_secret="GENERATE_YOUR_OWN_RANDOM_VALUE_HERE__", #TODO
             debug=True,
         )
         super(Application, self).__init__(handlers, **settings)
@@ -41,8 +39,8 @@ class BaseHandler(tornado.web.RequestHandler):
 
 class HomeHandler(BaseHandler):
     def get(self):
-        #self.render("base.html")
-        self.write("welcome to my report website")
+        self.render("base.html")
+        #self.write("welcome to my report website")
 
 
 class AbstractHandler(BaseHandler):
@@ -53,7 +51,7 @@ class AbstractHandler(BaseHandler):
         return self.db[conf.MONGODB_COLLECTION_REPORT_ABSTRACT]
     
     def get(self):
-        cursor = self.collection.find().limit(self.LIMIT_NUMBER)
+        cursor = self.collection.find().sort([("date", 1)]).limit(self.LIMIT_NUMBER)
         
         result = []
         I = iter(cursor)
@@ -83,8 +81,10 @@ class AbstractHandler(BaseHandler):
             response = {"error": "argument error"}
             self.write(json.dumps(response))
         
+        offset = int(offset)
+        limit = int(limit)
         result = []
-        cursor = self.collection.find().sort({"date":1})
+        cursor = self.collection.find().sort([("date", 1)])
         cursor = cursor.skip(offset).limit(limit)
         I = iter(cursor)
         while(True):
@@ -104,6 +104,19 @@ class AbstractHandler(BaseHandler):
             "number_results": len(result),
             "result": result,
         }
+        self.write(json.dumps(response))
+
+
+class AbstractCountHandler(BaseHandler):
+    LIMIT_NUMBER = 5
+    
+    @property
+    def collection(self):
+        return self.db[conf.MONGODB_COLLECTION_REPORT_ABSTRACT]
+    
+    def get(self):
+        number = self.collection.find().count()
+        response = {"number":number}
         self.write(json.dumps(response))
 
 
