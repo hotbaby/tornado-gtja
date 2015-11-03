@@ -65,71 +65,15 @@
 	<hr>
 </div>
 
-
-<div class="content" style="display:none">
-	<div class="postbody">
-		<h3 class="posttile">title</h3><br>
-		<span class="postdate"> 2015.11.2</span><br>
-		<div class="postabstract">
-			<strong>Abstract .........</strong>
-		</div>
-	</div>
-	<hr>
-</div>
-
-
-<div class="content" style="display:none">
-	<div class="postbody">
-		<h3 class="posttile">title</h3><br>
-		<span class="postdate"> 2015.11.2</span><br>
-		<div class="postabstract">
-			<strong>Abstract .........</strong>
-		</div>
-	</div>
-	<hr>
-</div>
-
-
-<div class="content" style="display:none">
-	<div class="postbody">
-		<h3 class="posttile">title</h3><br>
-		<span class="postdate"> 2015.11.2</span><br>
-		<div class="postabstract">
-			<strong>Abstract .........</strong>
-		</div>
-	</div>
-	<hr>
-</div>
-
-
-<div class="content" style="display:none">
-	<div class="postbody">
-		<h3 class="posttile">title</h3><br>
-		<span class="postdate"> 2015.11.2</span><br>
-		<div class="postabstract">
-			<strong>Abstract .........</strong>
-		</div>
-	</div>
-	<hr>
-</div>
-
-
-<div class="content" style="display:none">
-	<div class="postbody">
-		<h3 class="posttile">title</h3><br>
-		<span class="postdate"> 2015.11.2</span><br>
-		<div class="postabstract">
-			<strong>Abstract .........</strong>
-		</div>
-	</div>
-	<hr>
-</div>
-
 <div class="contentpageindex" style="display:none">
+<span>Page:</span>
+<span>currrent</span>
+<span>/</span>
+<span>total</span>
 <a href="javascrip:goHomePage()">Home</a>
-<a hidden="hidden" href="javascrip:toPreviousPage()">Previous</a>
-<a hidden="hidden" href="javascrip:toNextPage()">Next</a>
-<a href="javascrip:toLastPage()">Last</a>
+<a hidden="hidden" href="javascrip:goPreviousPage()">Previous</a>
+<a hidden="hidden" href="javascrip:goNextPage()">Next</a>
+<a href="javascrip:goLastPage()">Last</a>
 </div>
 
 <script>
@@ -138,21 +82,17 @@ $(document).ready(function() {
 	$.get("/report/abstract", function(data, status){
 		
 		var jsonData = $.parseJSON(data)
-		
-		for(var i=0; i<jsonData.length; i++)
+		items = jsonData["result"]
+		for(var i=0; i<items.length; i++)
 		{
-			var sel = ".posttile:eq(".concat(i.toString(), ")")
-			$(".posttile:eq(0)").replaceWith(jsonData[i]["title"])
-			sel = "div.postdate:eq(".concat(i.toString(), ")")
-			$("div.postdate:eq(0)").replaceWith(jsonData[i]["date"])
-			sel = "div.postabstract:eq(".concat(i.toString(), ")")
-			$("div.postabstract:eq(0)").replaceWith(jsonData[i]["abstract"])
+			$(".posttile:eq(0)").replaceWith(items[i]["title"])
+			$("div.postdate:eq(0)").replaceWith(items[i]["date"])
+			$("div.postabstract:eq(0)").replaceWith(items[i]["abstract"])
 		}
 		$(".content").show()
 		$(".contentpageindex").show()
 	})
 })
-
 
 </script>
 

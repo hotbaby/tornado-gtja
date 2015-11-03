@@ -6,6 +6,9 @@ import tornado.httpserver
 from pymongo import Connection
 
 import conf
+from jieba.__main__ import result
+from boto.dynamodb.item import Item
+from win32con import SLE_ERROR
     
 
 class Application(tornado.web.Application):
@@ -38,19 +41,19 @@ class BaseHandler(tornado.web.RequestHandler):
 
 class HomeHandler(BaseHandler):
     def get(self):
-        #self.set_header("content-type", "text/plain")
-        #self.write("<p>Welcome to gtja report website..</p>")
-        self.render("base.html")
+        #self.render("base.html")
+        self.write("welcome to my report website")
 
 
 class AbstractHandler(BaseHandler):
+    LIMIT_NUMBER = 5
     
     @property
     def collection(self):
         return self.db[conf.MONGODB_COLLECTION_REPORT_ABSTRACT]
     
     def get(self):
-        cursor = self.collection.find().limit(10)
+        cursor = self.collection.find().limit(self.LIMIT_NUMBER)
         
         result = []
         I = iter(cursor)
@@ -65,8 +68,43 @@ class AbstractHandler(BaseHandler):
                 })
             except StopIteration:
                 break
+        response = {
+            "number_results": len(result),
+            "result": result,
+        }
+        self.write(json.dumps(response))
         
-        self.write(json.dumps(result))
+    def post(self):
+
+        try:
+            offset = self.get_argument("offset", 0)
+            limit = self.get_argument("limit", self.LIMIT_NUMBER)
+        except Exception:
+            response = {"error": "argument error"}
+            self.write(json.dumps(response))
+        
+        result = []
+        cursor = self.collection.find().sort({"date":1})
+        cursor = cursor.skip(offset).limit(limit)
+        I = iter(cursor)
+        while(True):
+            try:
+                item = next(I)
+                result.append({
+                    "title": item["title"],
+                    "date": str(item["date"]),
+                    "abstract": item["abstract"],
+                    "url":item["url"]
+                })
+            except StopIteration:
+                break
+            except Exception:
+                break
+        response = {
+            "number_results": len(result),
+            "result": result,
+        }
+        self.write(json.dumps(response))
 
 
 def make_app():
