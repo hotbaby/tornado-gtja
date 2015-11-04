@@ -3,6 +3,7 @@ import json
 import os
 import tornado.web
 import tornado.httpserver
+import pymongo
 from pymongo import Connection
 
 import conf
@@ -51,7 +52,7 @@ class AbstractHandler(BaseHandler):
         return self.db[conf.MONGODB_COLLECTION_REPORT_ABSTRACT]
     
     def get(self):
-        cursor = self.collection.find().sort([("date", 1)]).limit(self.LIMIT_NUMBER)
+        cursor = self.collection.find({}).sort([("date", pymongo.DESCENDING)]).limit(self.LIMIT_NUMBER)
         
         result = []
         I = iter(cursor)
@@ -78,13 +79,13 @@ class AbstractHandler(BaseHandler):
             offset = self.get_argument("offset", 0)
             limit = self.get_argument("limit", self.LIMIT_NUMBER)
         except Exception:
-            response = {"error": "argument error"}
+            response = {"error": "request argument error"}
             self.write(json.dumps(response))
         
         offset = int(offset)
         limit = int(limit)
         result = []
-        cursor = self.collection.find().sort([("date", 1)])
+        cursor = self.collection.find({}).sort([("date", pymongo.DESCENDING)])
         cursor = cursor.skip(offset).limit(limit)
         I = iter(cursor)
         while(True):
@@ -96,9 +97,11 @@ class AbstractHandler(BaseHandler):
                     "abstract": item["abstract"],
                     "url":item["url"]
                 })
-            except StopIteration:
+            except StopIteration, e:
+                print(e)
                 break
-            except Exception:
+            except Exception, e:
+                print(e)
                 break
         response = {
             "number_results": len(result),
